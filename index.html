@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aurum Parfums — Where Elegance Meets Essence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff;
+      --text:#111;
+      --muted:#6b6b6b;
+      --gold:#b99056; /* champagne gold */
+      --accent:#0b0b0b; /* deep black */
+      --beige:#f5efe8;
+      --glass: rgba(255,255,255,0.6);
+      --card-shadow: 0 8px 24px rgba(12,12,12,0.12);
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Lato,system-ui,Arial,sans-serif;margin:0;background:var(--beige);color:var(--text);-webkit-font-smoothing:antialiased}
+    .container{max-width:var(--max-width);margin:0 auto;padding:24px}
+
+    /* Navbar */
+    .navbar{position:sticky;top:0;backdrop-filter:blur(5px);background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.7));display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(0,0,0,0.04);z-index:60;flex-wrap:wrap}
+    .logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:1px;color:var(--accent);flex:1}
+    .nav-links{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+    .nav-links a{color:var(--muted);text-decoration:none;font-weight:600}
+    .search{position:relative}
+    .search input{padding:8px 12px;border-radius:6px;border:1px solid rgba(0,0,0,0.06);width:140px}
+
+    /* Hero */
+    .hero{height:75vh;display:grid;grid-template-columns:1fr 480px;align-items:center;gap:32px;padding:48px 0}
+    .hero-left h1{font-family:'Playfair Display',serif;font-size:52px;margin:0;line-height:1;color:var(--accent)}
+    .hero-left p{color:var(--muted);max-width:48ch}
+    .cta{display:inline-block;margin-top:18px;padding:12px 20px;border-radius:8px;background:var(--gold);color:white;text-decoration:none;font-weight:700}
+    .hero-right{display:flex;align-items:center;justify-content:center}
+    .bottle{width:320px;height:420px;border-radius:14px;background:linear-gradient(180deg,#fff, #f7f3ef);box-shadow:var(--card-shadow);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .bottle img{width:80%;transform:translateY(6px);transition:transform .45s}
+    .bottle:hover img{transform:translateY(-6px) scale(1.04)}
+
+    /* Sections */
+    .section{padding:48px 0}
+    h2.section-title{font-family:'Playfair Display',serif;font-size:28px;margin:8px 0}
+    .collections{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .card{background:white;border-radius:12px;padding:14px;box-shadow:var(--card-shadow);overflow:hidden;position:relative}
+    .card img{width:100%;height:240px;object-fit:cover;transition:opacity .35s}
+    .card:hover img{opacity:0.9}
+    .card h3{margin:12px 0 6px 0;font-family:'Playfair Display',serif}
+    .card p{color:var(--muted);font-size:14px}
+
+    /* Product grid */
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+    .product{background:white;border-radius:12px;padding:12px;box-shadow:var(--card-shadow);text-align:center}
+    .product img{width:100%;height:300px;object-fit:cover;border-radius:8px;transition:transform .35s}
+    .product:hover img{transform:scale(1.03)}
+    .price{font-weight:700;margin-top:8px}
+    .add-btn{margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--accent);color:white;border:none;cursor:pointer}
+
+    /* Cart */
+    .cart-btn{position:fixed;right:22px;bottom:22px;background:var(--gold);border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:var(--card-shadow);cursor:pointer}
+    .cart-count{position:absolute;top:-6px;right:-6px;background:#111;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px}
+    .cart-panel{position:fixed;right:0;top:0;height:100vh;width:420px;background:white;box-shadow:-20px 0 40px rgba(0,0,0,0.08);transform:translateX(100%);transition:transform .32s;padding:22px;z-index:80;display:flex;flex-direction:column}
+    .cart-panel.open{transform:translateX(0)}
+    .cart-header{display:flex;justify-content:space-between;align-items:center}
+    .cart-item{display:flex;gap:12px;align-items:center;padding:10px 6px;border-bottom:1px dashed rgba(0,0,0,0.05)}
+    .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+    .qty{display:flex;align-items:center;gap:8px}
+    .qty button{padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.06);cursor:pointer}
+    .checkout{margin-top:14px;padding:12px 16px;border-radius:8px;background:var(--accent);color:white;border:none;width:100%;font-weight:700}
+    .whatsapp{margin-top:10px;padding:12px 16px;border-radius:8px;background:#25D366;color:white;border:none;width:100%;font-weight:700}
+
+    /* Notes breakdown */
+    .notes{display:flex;gap:12px;align-items:center}
+    .note{flex:1;padding:10px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.5));text-align:center}
+
+    /* Footer */
+    footer{padding:40px 0;text-align:center;color:var(--muted);background:#111;color:#eee}
+    footer .socials{margin-top:10px;display:flex;gap:16px;justify-content:center}
+    footer .socials a{color:var(--gold);font-size:20px;text-decoration:none}
+
+    /* Admin link small */
+    .admin-link{font-size:13px;color:var(--muted);cursor:pointer}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;min-height:60vh}
+      .hero-right{order:-1}
+      .cart-panel{width:100%}
+      .search input{width:100%}
+      .nav-links{flex:1;justify-content:flex-end}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">Aurum Parfums</div>
+    <div class="nav-links">
+      <a href="#collections">Collections</a>
+      <a href="#shop">Shop</a>
+      <a href="#journal">Journal</a>
+      <a href="#about">About</a>
+      <div class="search"><input id="searchInput" placeholder="Search perfumes..." aria-label="Search perfumes" /></div>
+      <div class="admin-link" onclick="openAdmin()" role="button" aria-pressed="false">Owner</div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h1>Where Elegance Meets Essence</h1>
+        <p>Handcrafted fragrances inspired by travel, memory, and rare botanical extracts. Each perfume is a capsule of storytelling — discover your signature scent.</p>
+        <a class="cta" href="#shop" onclick="scrollToShop()">Shop Now</a>
+      </div>
+      <div class="hero-right">
+        <div class="bottle">
+          <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=4a6f1c9d59e4e0b1f4b3a7b6e2b4b993" alt="perfume bottle">
+        </div>
+      </div>
+    </section>
+
+    <section id="collections" class="section">
+      <h2 class="section-title">Featured Collections</h2>
+      <div class="collections">
+        <div class="card">
+          <img src="cafe-photo1.jpeg" alt="signature">
+          <h3>Signature</h3>
+          <p>Timeless blends crafted for daily elegance.</p>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8d3b8a1b" alt="limited">
+          <h3>Limited Edition</h3>
+          <p>Rare, small-batch releases — numbered and secured.</p>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1473186578172-c141e6798cf4?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1a2b3c4d" alt="seasonal">
+          <h3>Seasonal</h3>
+          <p>Notes tuned to the mood of each season.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="shop" class="section">
+      <h2 class="section-title">Shop</h2>
+      <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <p style="color:var(--muted)">Explore our curated fragrances.</p>
+        <div style="display:flex;gap:8px">
+          <select id="categoryFilter" onchange="renderProducts()"><option value="all">All</option><option value="signature">Signature</option><option value="limited">Limited</option><option value="seasonal">Seasonal</option></select>
+        </div>
+      </div>
+      <div id="products" class="products-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="about" class="section">
+      <h2 class="section-title">Crafted with Intent</h2>
+      <p style="color:var(--muted);max-width:70ch">Each formula is developed with a perfumer's eye for balance and longevity — oud and rose, amber and citrus — layered to reveal new facets throughout the day. Our packaging is designed for ritual: heavy glass, hand-finished labels, and luxurious tissue wrapping.</p>
+    </section>
+
+    <section id="journal" class="section">
+      <h2 class="section-title">Journal</h2>
+      <div class="collections">
+        <div class="card"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8271" alt="journal"><h3>The Art of Layering</h3><p>How to mix your scents for an evening out.</p></div>
+        <div class="card'><img src="https://images.unsplash.com/photo-1506455895653-0f3d6a8f7a4b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abcd" alt="behind"><h3>Behind the Bottle</h3><p>A glimpse into our sourcing and ateliers.</p></div>
+      </div>
+    </section>
+
+    <footer class="section">
+      <p>&copy; <span id="year"></span> Aurum Parfums — All rights reserved.</p>
+      <div class="socials">
+        <a href="#" title="Instagram">&#x1F4F7;</a>
+        <a href="#" title="Facebook">&#x1F465;</a>
+        <a href="#" title="Twitter">&#x1F426;</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Floating cart button -->
+  <div class="cart-btn" id="cartBtn" title="Cart" aria-label="Open cart">
+    <button id="cartBtnInner" style="all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;width:100%;height:100%" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>
+    </button>
+    <div id="cartCount" class="cart-count">0</div>
+  </div>
+
+  <!-- Cart panel -->
+  <aside id="cartPanel" class="cart-panel" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="cartCloseBtn" aria-label="Close cart" style="background:none;border:none;font-size:28px;line-height:1;cursor:pointer">&times;</button>
+    </div>
+    <div id="cartItems" style="flex:1;overflow:auto;margin-top:12px"></div>
+    <div style="margin-top:12px;">
+      <div style="display:flex;justify-content:space-between;color:var(--muted)"><div>Subtotal</div><div id="subtotal">₹0</div></div>
+      <button class="checkout" onclick="checkout()">Proceed to Checkout</button>
+      <button class="whatsapp" onclick="whatsappOrder()">Order via WhatsApp</button>
+    </div>
+  </aside>
+
+  <!-- Admin modal -->
+  <div id="adminModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);z-index:120">
+    <div style="width:780px;background:white;border-radius:12px;padding:18px;max-height:90vh;overflow:auto">
+      <h3>Owner Admin Panel</h3>
+      <div id="adminContent"></div>
+      <div style="text-align:right;margin-top:14px"><button onclick="closeAdmin()" style="padding:8px 12px;border-radius:8px">Close</button></div>
+    </div>
+  </div>
+
+  <script>
+  const API_URL = "http://localhost:5000/api/products";
+
+  // --- Sample fallback data ---
+  const SAMPLE_PRODUCTS = [
+    {id:'aur-001',name:'Noir Oud',price:4200,category:'signature',img:'https://images.unsplash.com/photo-1541542684-4f6b36a6f8ed?q=80&w=1200&auto=format&fit=crop'},
+    {id:'aur-002',name:'Rose Dusk',price:3800,category:'signature',img:'https://images.unsplash.com/photo-1519741491753-3d1a6f4f3b44?q=80&w=1200&auto=format&fit=crop'},
+    {id:'aur-003',name:'Amber Voyage',price:4600,category:'limited',img:'https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=1200&auto=format&fit=crop'},
+    {id:'aur-004',name:'Citrus Serenade',price:2500,category:'seasonal',img:'https://images.unsplash.com/photo-1505740106531-4243f3831b21?q=80&w=1200&auto=format&fit=crop'}
+  ];
+
+  // --- API functions ---
+  async function loadProducts() {
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error("Failed to fetch products");
+      return await res.json();
+    } catch (err) {
+      console.warn("Backend not reachable, using sample products", err);
+      return SAMPLE_PRODUCTS;
+    }
+  }
+
+  async function createProduct(product) {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(product),
+    });
+    return await res.json();
+  }
+
+  async function updateProduct(id, updated) {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    });
+    return await res.json();
+  }
+
+  async function deleteProductAPI(id) {
+    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  }
+
+  // --- Cart ---
+  let cart = {};
+  try { 
+    const rawCart = localStorage.getItem('aur_cart'); 
+    cart = rawCart ? JSON.parse(rawCart) : {}; 
+  } catch(e) { cart = {} }
+
+  function saveCart() {
+    localStorage.setItem('aur_cart', JSON.stringify(cart)); 
+    renderCart();
+  }
+
+  function currency(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+  // --- Render products ---
+  async function renderProducts() {
+    const container = document.getElementById('products'); 
+    if (!container) return;
+    container.innerHTML = '';
+
+    const q = (document.getElementById('searchInput').value||'').toLowerCase().trim();
+    const cat = document.getElementById('categoryFilter').value;
+
+    const products = await loadProducts();
+    const filtered = products.filter(p => 
+      (cat==='all'||p.category===cat) && 
+      (p.name.toLowerCase().includes(q) || (p.category||'').includes(q))
+    );
+
+    filtered.forEach(p=>{
+      const el = document.createElement('div');
+      el.className='product';
+      el.innerHTML = `
+        <img src="${p.img}" alt="${p.name}">
+        <h3 style="font-family:'Playfair Display',serif;margin:8px 0 2px 0">${p.name}</h3>
+        <div class='price'>${currency(p.price)}</div>
+        <div style='color:var(--muted);font-size:14px;margin-top:6px'>A blend of rare ingredients — top, heart & base harmonies.</div>
+        <button class='add-btn' data-id='${p.id}'>Add to Cart</button>`;
+      container.appendChild(el);
+    });
+
+    // attach listeners
+    container.querySelectorAll('.add-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>addToCart(btn.dataset.id));
+    });
+  }
+
+  async function addToCart(id){
+    const products = await loadProducts();
+    const p = products.find(x=>x.id===id); 
+    if(!p) return;
+    if(!cart[id]) cart[id]={...p,qty:0}; 
+    cart[id].qty++;
+    saveCart();
+    updateCartCount();
+    openCartPanel();
+  }
+
+  // --- Render cart ---
+  function renderCart(){
+    const panel = document.getElementById('cartItems'); if(!panel) return;
+    panel.innerHTML='';
+    const entries = Object.values(cart);
+    if(entries.length===0){
+      panel.innerHTML='<p style="color:var(--muted)">Your cart is empty.</p>';
+      document.getElementById('subtotal').innerText=currency(0);
+      document.getElementById('cartCount').innerText='0';
+      return;
+    }
+    let total=0;
+    entries.forEach(it=>{
+      total+=it.price*it.qty;
+      const d=document.createElement('div');
+      d.className='cart-item';
+      d.innerHTML=`<img src="${it.img}" alt="${it.name}">
+        <div style="flex:1"><strong>${it.name}</strong>
+        <div style="color:var(--muted)"> ${currency(it.price)} x ${it.qty}</div></div>
+        <div class='qty'><button class='dec' data-id='${it.id}'>-</button>
+        <div>${it.qty}</div>
+        <button class='inc' data-id='${it.id}'>+</button></div>`;
+      panel.appendChild(d);
+    });
+    document.getElementById('subtotal').innerText=currency(total);
+    document.getElementById('cartCount').innerText=entries.reduce((s,i)=>s+i.qty,0);
+
+    panel.querySelectorAll('.dec').forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.id,-1)));
+    panel.querySelectorAll('.inc').forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.id,1)));
+  }
+
+  function changeQty(id,delta){ 
+    if(!cart[id]) return; 
+    cart[id].qty += delta; 
+    if(cart[id].qty<=0) delete cart[id]; 
+    saveCart(); 
+    updateCartCount(); 
+  }
+
+  // Cart panel controls
+  function toggleCart(){
+    const panel = document.getElementById('cartPanel'); if(!panel) return;
+    const isOpen = panel.classList.contains('open');
+    if(isOpen){ closeCartPanel(); } else { openCartPanel(); }
+  }
+  function openCartPanel(){ 
+    const panel=document.getElementById('cartPanel'); 
+    if(panel){ panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); } 
+  }
+  function closeCartPanel(){ 
+    const panel=document.getElementById('cartPanel'); 
+    if(panel){ panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); } 
+  }
+  function updateCartCount(){ 
+    document.getElementById('cartCount').innerText = Object.values(cart).reduce((s,i)=>s+i.qty,0); 
+  }
+
+  // Checkout
+  function checkout(){ alert('This demo uses WhatsApp ordering for checkout. For card payments integrate a gateway in production.'); }
+
+  // WhatsApp order
+  function whatsappOrder(){
+    const entries = Object.values(cart);
+    if(entries.length===0){alert('Your cart is empty.');return}
+    let msg = 'Hello Aurum Parfums - I would like to place an order:\n';
+    entries.forEach(it=>{ msg += `\n*${it.name}* x${it.qty} - ${'₹'+it.price}`; });
+    const subtotal = entries.reduce((s,i)=>s+i.price*i.qty,0);
+    msg += `\n\nSubtotal: ₹${subtotal}\n\nName:\nPhone:\nShipping Address:\n\n(Please mention preferred payment method)`;
+    const encoded = encodeURIComponent(msg);
+    const phoneNumber = ''; // set your store number here
+    const url = phoneNumber? `https://wa.me/${phoneNumber}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
+    window.open(url,'_blank');
+  }
+
+  // --- Admin panel ---
+  const OWNER_PASSWORD = 'owner123'; 
+  function openAdmin(){
+    const pass = prompt('Enter owner password:');
+    if(pass !== OWNER_PASSWORD){alert('Unauthorized');return}
+    document.getElementById('adminModal').style.display='flex';
+    renderAdmin();
+  }
+  function closeAdmin(){document.getElementById('adminModal').style.display='none'}
+
+  async function renderAdmin(){
+    const root = document.getElementById('adminContent');
+    const products = await loadProducts();
+    root.innerHTML = `
+      <div style="display:flex;gap:12px;margin-bottom:12px">
+        <button onclick="showAddForm()" style="padding:8px 12px;border-radius:8px;background:var(--gold);border:none;color:#fff">Add Product</button>
+      </div>
+      <div id='adminList'>
+        ${products.map(p=>`
+          <div style='display:flex;gap:12px;align-items:center;padding:8px;border-bottom:1px solid rgba(0,0,0,0.04)'>
+            <img src='${p.img}' style='width:64px;height:64px;object-fit:cover;border-radius:8px'>
+            <div style='flex:1'><strong>${p.name}</strong>
+            <div style='color:var(--muted)'>${p.id} • ${p.category} • ${currency(p.price)}</div></div>
+            <div>
+              <button onclick="editProduct('${p.id}')">Edit</button> 
+              <button onclick="deleteProductHandler('${p.id}')">Delete</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    `;
+  }
+
+  function showAddForm(){
+    const root = document.getElementById('adminContent');
+    root.innerHTML = `
+      <h4>Add New Product</h4>
+      <div style='display:grid;grid-template-columns:1fr 1fr;gap:8px'>
+        <input id='np_id' placeholder='Product ID' />
+        <input id='np_name' placeholder='Name' />
+        <input id='np_price' placeholder='Price' />
+        <input id='np_category' placeholder='Category' />
+        <input id='np_img' placeholder='Image URL' />
+      </div>
+      <div style='margin-top:8px'>
+        <button onclick='createProductHandler()' style='padding:8px 12px;background:var(--gold);color:#fff;border:none;border-radius:8px'>Create</button> 
+        <button onclick='renderAdmin()' style='padding:8px 12px'>Cancel</button>
+      </div>
+    `;
+  }
+
+  async function createProductHandler(){
+    const id = document.getElementById('np_id').value.trim();
+    const name = document.getElementById('np_name').value.trim();
+    const price = parseInt(document.getElementById('np_price').value||0);
+    const category = document.getElementById('np_category').value.trim()||'signature';
+    const img = document.getElementById('np_img').value.trim();
+    if(!id||!name||!price){alert('Please fill required');return}
+    await createProduct({id,name,price,category,img});
+    renderAdmin(); renderProducts();
+  }
+
+  function editProduct(id){
+    loadProducts().then(products=>{
+      const p = products.find(x=>x.id===id); if(!p) return;
+      const root = document.getElementById('adminContent');
+      root.innerHTML = `
+        <h4>Edit ${p.name}</h4>
+        <div style='display:grid;grid-template-columns:1fr 1fr;gap:8px'>
+          <input id='ep_id' value='${p.id}' disabled />
+          <input id='ep_name' value='${p.name}' />
+          <input id='ep_price' value='${p.price}' />
+          <input id='ep_category' value='${p.category}' />
+          <input id='ep_img' value='${p.img}' />
+        </div>
+        <div style='margin-top:8px'>
+          <button onclick="saveEdit('${p.id}')" style='padding:8px 12px;background:var(--gold);color:#fff;border:none;border-radius:8px'>Save</button> 
+          <button onclick='renderAdmin()' style='padding:8px 12px'>Cancel</button>
+        </div>
+      `;
+    });
+  }
+
+  async function saveEdit(id){
+    const name = document.getElementById('ep_name').value.trim();
+    const price = parseInt(document.getElementById('ep_price').value||0);
+    const category = document.getElementById('ep_category').value.trim();
+    const img = document.getElementById('ep_img').value.trim();
+    await updateProduct(id,{name,price,category,img});
+    renderAdmin(); renderProducts();
+  }
+
+  async function deleteProductHandler(id){
+    if(!confirm('Delete this product?')) return;
+    await deleteProductAPI(id);
+    renderAdmin(); renderProducts();
+  }
+
+  // --- Init ---
+  function scrollToShop(){document.getElementById('shop').scrollIntoView({behavior:'smooth'})}
+  document.getElementById('year').innerText = new Date().getFullYear();
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    renderProducts();
+    renderCart();
+    updateCartCount();
+
+    document.getElementById('cartBtn').addEventListener('click',toggleCart);
+    document.getElementById('cartBtnInner').addEventListener('click',(e)=>{ e.stopPropagation(); toggleCart(); });
+    document.getElementById('cartCloseBtn').addEventListener('click',closeCartPanel);
+
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeCartPanel(); });
+
+    const s = document.getElementById('searchInput'); 
+    if(s) s.addEventListener('input',renderProducts);
+
+    updateCartCount();
+  });
+</script>
+
+
+</body>
+</html>
