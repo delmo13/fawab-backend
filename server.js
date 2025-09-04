@@ -1,63 +1,63 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-const PORT = 5000;
-
-// Middleware
+app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
 
-// Path to products.json
-const dataFile = path.join(__dirname, "products.json");
+// Path to products file
+const productsFile = path.join(__dirname, "products.json");
 
-// Helper functions
+// Helper to read products
 function readProducts() {
-  if (!fs.existsSync(dataFile)) {
-    fs.writeFileSync(dataFile, JSON.stringify([]));
+  try {
+    const data = fs.readFileSync(productsFile, "utf-8");
+    return JSON.parse(data);
+  } catch (err) {
+    return []; // return empty list if file is missing or invalid
   }
-  const data = fs.readFileSync(dataFile, "utf-8");
-  return JSON.parse(data);
 }
 
-function writeProducts(products) {
-  fs.writeFileSync(dataFile, JSON.stringify(products, null, 2));
+// Helper to save products
+function saveProducts(products) {
+  fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
 }
 
-// Routes
+// --- API Routes ---
+
+// Get all products
 app.get("/api/products", (req, res) => {
   const products = readProducts();
   res.json(products);
 });
 
+// Add a product
 app.post("/api/products", (req, res) => {
   const products = readProducts();
-  const newProduct = { id: Date.now(), ...req.body };
+  const newProduct = {
+    id: Date.now(),
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description,
+    image: req.body.image || ""
+  };
   products.push(newProduct);
-  writeProducts(products);
-  res.json(newProduct);
+  saveProducts(products);
+  res.status(201).json(newProduct);
 });
 
-app.put("/api/products/:id", (req, res) => {
-  const products = readProducts();
-  const index = products.findIndex(p => p.id == req.params.id);
-  if (index === -1) return res.status(404).json({ error: "Product not found" });
-  products[index] = { ...products[index], ...req.body };
-  writeProducts(products);
-  res.json(products[index]);
-});
-
+// Delete a product
 app.delete("/api/products/:id", (req, res) => {
-  let products = readProducts();
-  products = products.filter(p => p.id != req.params.id);
-  writeProducts(products);
+  const products = readProducts();
+  const filtered = products.filter(p => p.id != req.params.id);
+  saveProducts(filtered);
   res.json({ success: true });
 });
 
-// Start server
+// --- Start Server ---
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
