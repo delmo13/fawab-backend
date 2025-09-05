@@ -5,7 +5,12 @@ const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "*",   // allow all origins (for now, safe during dev)
+  methods: ["GET", "POST", "DELETE", "PUT"], // allowed methods
+  allowedHeaders: ["Content-Type"]
+}));
+
 
 // Path to products file
 const productsFile = path.join(__dirname, "products.json");
